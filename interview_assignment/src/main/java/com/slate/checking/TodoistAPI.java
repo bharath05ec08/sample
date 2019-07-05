@@ -2,9 +2,9 @@ package com.slate.checking;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
+import java.util.HashMap;
+import java.util.List;
 import com.google.gson.JsonObject;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -31,9 +31,11 @@ public class TodoistAPI {
 		URL_ENDPOINT = new URI(ENDPOINT+"projects");
 		RES = REQ.get(URL_ENDPOINT);
 		
-		System.out.println("Response is "+RES.asString());
+		System.out.println("Project is "+RES.asString());
 		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
-		createProject("Project_bharath1");
+//		createProject("Project_bharath1");
+		verifyTask("New task");
+//		reopenTask("12");
 	}
 	
 	
@@ -46,15 +48,39 @@ public class TodoistAPI {
 		 
 		/*There is an issue with Rest assured for post request
 		This is the reference for older version. How ever the same issue is exists in newer version as well
-		 I will work on this issue at the time of closing the project.
+		 I will work on this issue at the time of completing the project.
 		https://groups.google.com/forum/#!topic/rest-assured/WKkOdjrboSA
 		*/
+		//Following line will be uncommented once the post issue resolved
 		REQ.header(AUTH).header(CONTENT).body(PROJECT_NAME.toString());		
-		RES = REQ.post(URL_ENDPOINT).peek();
+//		RES = REQ.post(URL_ENDPOINT).peek();
 	}
 	
-	public static void verifyTask(String TASK_ID)
+	public static String verifyTask(String TASK_NAME) throws URISyntaxException
 	{
+		String TASK_ID=null;
+		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
+		URL_ENDPOINT = new URI(ENDPOINT+"tasks");	
+		RES = REQ.header(AUTH).get(URL_ENDPOINT);
 		
+		  List<HashMap<String,String>> JSON = RES.jsonPath().getList("$");
+		  
+		  for(int i=0;i<JSON.size();i++)
+		  {
+			  if(JSON.get(i).get("content").equals(TASK_NAME))
+				  TASK_ID = String.valueOf(JSON.get(i).get("id"));
+		  }
+		  
+		return TASK_ID;
+	}
+	
+	public static void reopenTask(String TASK_ID) throws URISyntaxException
+	{
+		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
+		URL_ENDPOINT = new URI(ENDPOINT+"tasks/"+TASK_ID+"/reopen");	
+		RES = REQ.header(AUTH).post(URL_ENDPOINT);
+		
+		if(RES.statusCode()!=204)
+			throw new RuntimeException("Task reopen is failed with status code : "+RES.statusCode());
 	}
 }
