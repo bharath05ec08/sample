@@ -37,12 +37,12 @@ public class TodoistAPI {
 	}
 	
 	
-	public static void createProject(String projectName) throws URISyntaxException
+	public static void createProject(String NAME) throws URISyntaxException
 	{
 		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
 		URL_ENDPOINT = new URI(ENDPOINT+"projects");
 		JsonObject PROJECT_NAME = new JsonObject();
-		PROJECT_NAME.addProperty("name", projectName);  
+		PROJECT_NAME.addProperty("name", NAME);  
 		 
 		/*There is an issue with Rest assured for post request
 		This is the reference for older version. How ever the same issue is exists in newer version as well
@@ -51,5 +51,10 @@ public class TodoistAPI {
 		*/
 		REQ.header(AUTH).header(CONTENT).body(PROJECT_NAME.toString());		
 		RES = REQ.post(URL_ENDPOINT).peek();
+	}
+	
+	public static void verifyTask(String TASK_ID)
+	{
+		
 	}
 }
