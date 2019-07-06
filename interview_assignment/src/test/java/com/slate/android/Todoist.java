@@ -14,14 +14,14 @@ public class Todoist extends BaseTestcase{
 		// API call to create the project
 		TodoistAPI.createProject("PROJ_"+TIMESTAMP.getTimestamp());
 		
-		TODOIST_PAGE.loginTodoist("bharath05ec08@gmail.com", "sudhahar");
+		TODOIST_PAGE.loginTodoist(USER_NAME, PASSWORD);
 		TODOIST_PAGE.movetoProjectFolder();
 		TODOIST_PAGE.verifyProjectDisplayed("PROJ_"+TIMESTAMP.getTimestamp());
 	}
 
 	@Test
 	public void createTask() throws URISyntaxException {
-		TODOIST_PAGE.loginTodoist("bharath05ec08@gmail.com", "sudhahar");
+		TODOIST_PAGE.loginTodoist(USER_NAME, PASSWORD);
 		TODOIST_PAGE.movetoProject("TEST_PROJ");
 		TODOIST_PAGE.addTask(TASK_NAME);	
 		
@@ -32,13 +32,14 @@ public class Todoist extends BaseTestcase{
 	@Test
 	public void reopenTask() throws Exception{
 		
-		TODOIST_PAGE.loginTodoist("bharath05ec08@gmail.com", "sudhahar");
+		TODOIST_PAGE.loginTodoist(USER_NAME, PASSWORD);
 		TODOIST_PAGE.movetoProject("TEST_PROJ");
 		TODOIST_PAGE.addTask(TASK_NAME);
+		TASK_ID = TodoistAPI.verifyTask(TASK_NAME); 
 		TODOIST_PAGE.completeTask(TASK_NAME);
 		
 		// API call to reopen the task
-		TodoistAPI.reopenTask(TodoistAPI.verifyTask(TASK_NAME));
+		TodoistAPI.reopenTask(TASK_ID);
 		
 		TODOIST_PAGE.verifyTaskDisplayed(TASK_NAME);
 	}

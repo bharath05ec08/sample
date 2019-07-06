@@ -26,6 +26,8 @@ public class BaseTestcase {
 	protected static Timestamp TIMESTAMP;
 	protected static String TASK_ID ="";
 	protected static String TASK_NAME = "TASK_";
+	protected static String USER_NAME = ReadProperties.ReadConfigProperties("USER_NAME");
+	protected static String PASSWORD = ReadProperties.ReadConfigProperties("PASSWORD");
 	private final String APPIUM_URL = ReadProperties.ReadConfigProperties("APPIUM_URL");
 
 	@BeforeMethod
@@ -37,14 +39,6 @@ public class BaseTestcase {
 		capabilities.setCapability("platformVersion", ReadProperties.ReadConfigProperties("PLATFORM_VERSION"));
 		capabilities.setCapability("appPackage", ReadProperties.ReadConfigProperties("APP_PACKAGE"));
 		capabilities.setCapability("appActivity", ReadProperties.ReadConfigProperties("APP_ACTIVITY"));
-				
-//		capabilities.setCapability(CapabilityType.BROWSER_NAME, "Android");
-//		capabilities.setCapability("deviceName", "LZEILRS4T8IZJZJB");
-//		capabilities.setCapability("platformName", "Android");
-//		capabilities.setCapability("platformVersion", "6.1");
-//		capabilities.setCapability("appPackage", "com.todoist");
-//		capabilities.setCapability("appActivity", "com.todoist.activity.HomeActivity");
-//				
 		
 		driver = new AndroidDriver(new URL(APPIUM_URL),capabilities);
 		driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
