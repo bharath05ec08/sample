@@ -4,7 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
-import com.google.gson.JsonObject;
+
+import org.junit.Assert;
 import com.slate.common.ReadProperties;
 
 import io.restassured.RestAssured;
@@ -31,17 +32,18 @@ public class TodoistAPI {
 	{
 		RestAssured.baseURI = ENDPOINT;
 		URL_ENDPOINT = new URI(ENDPOINT+"projects");
-		JsonObject PROJECT_NAME = new JsonObject();
-		PROJECT_NAME.addProperty("name", NAME);  
-		 
+		String DATA_JSON = "{\r\n" + 
+				"    \"name\": \""+NAME+"\"\r\n" + 
+				"}";
 		/*There is an issue with Rest assured for post request
 		This is the reference for older version. How ever the same issue is exists in newer version as well
 		 I will work on this issue at the time of completing the project.
 		https://groups.google.com/forum/#!topic/rest-assured/WKkOdjrboSA
 		*/
-		//Following line will be uncommented once the post issue resolved
-		REQ.header(AUTH).header(CONTENT).body(PROJECT_NAME.toString());		
-//		RES = REQ.post(URL_ENDPOINT).peek();
+ 	
+		REQ.header(AUTH).header(CONTENT).body(DATA_JSON);
+		RES = REQ.post(URL_ENDPOINT);
+		Assert.assertTrue("API create project is failed with status code "+RES.statusCode()+"\n Response is "+RES.asString(), RES.statusCode() != 200);
 	}
 	
 	public static String verifyTask(String TASK_NAME) throws URISyntaxException
@@ -54,7 +56,7 @@ public class TodoistAPI {
 		do {  
 			RES = REQ.header(AUTH).get(URL_ENDPOINT).peek();
 			List<HashMap<String,String>> JSON = RES.jsonPath().getList("$");
-			
+		
 				for(int i = 0; i<JSON.size(); i++)
 					{
 					  if(JSON.get(i).get("content").equals(TASK_NAME))
@@ -67,7 +69,6 @@ public class TodoistAPI {
 				
 		}while(count<5);
 		 
-		System.out.println("TASK_ID is "+TASK_ID);
 		return TASK_ID;
 	}
 	
@@ -75,9 +76,7 @@ public class TodoistAPI {
 	{
 		RestAssured.baseURI = ENDPOINT;
 		URL_ENDPOINT = new URI(ENDPOINT+"tasks/"+TASK_ID+"/reopen");	
-		RES = REQ.header(AUTH).post(URL_ENDPOINT).peek();
-		
-		if(RES.statusCode() != 204)
-			throw new RuntimeException("Task reopen is failed with status code : "+RES.statusCode());
+		RES = REQ.header(AUTH).post(URL_ENDPOINT);		
+		Assert.assertTrue("API reopen task is failed with status code "+RES.statusCode()+"\n Response is "+RES.asString(), RES.statusCode() != 204);
 	}
 }

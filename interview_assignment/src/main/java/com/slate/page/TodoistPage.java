@@ -2,6 +2,7 @@ package com.slate.page;
 
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -70,6 +71,8 @@ public class TodoistPage {
 	
 	public void loginTodoist(String username, String password)
 	{
+		try
+		{
 		clickElement(CONTINUE_WITH_MAIL);
 		try
 		{
@@ -81,48 +84,84 @@ public class TodoistPage {
 		clickElement(CONTINUE_BUTTON);
 		enterText(PASSWORD_TEXTBOX, password);
 		clickElement(LOGIN_BUTTON);
+		}catch(Exception e)
+		{
+			Assert.fail("Todoist is failed in login screen with exception "+e.toString());
+		}
 	}
 	
 	public void movetoProject(String projectname)
 	{
+		try {
 		movetoProjectFolder();
 		clickElement(PROJECT_NAME);
+	}catch(Exception e)
+	{
+		Assert.fail("Unable to move to the project "+projectname+"\t"+e.toString());
+	}
 	}
 	
 	public void movetoProjectFolder()
 	{
-		try
+		try {
+			
+			try
+			{
+				clickElement(REMIND_ME_LATER);
+			}catch(NoSuchElementException e)
+			{}
+			
+			clickElement(MENU);
+			clickElement(PROJECTS_FOLDER);
+		}catch(Exception e)
 		{
-		clickElement(REMIND_ME_LATER);
-		}catch(NoSuchElementException e)
-		{}
-		clickElement(MENU);
-		clickElement(PROJECTS_FOLDER);
+			Assert.fail("Unable to move to project folder "+e.toString());
+		}		
 	}
 	
 	public void addTask(String taskname)
 	{
-		clickElement(ADD_TASK_ICON);
-		enterText(TASK_NAME_TEXTBOX, taskname);
-		clickElement(SAVE_TASK);
-		clickElement(TASK_CLOSE_BUTTON);
+		try {
+				clickElement(ADD_TASK_ICON);
+				enterText(TASK_NAME_TEXTBOX, taskname);
+				clickElement(SAVE_TASK);
+				clickElement(TASK_CLOSE_BUTTON);
+			}catch(Exception e)
+			{
+				Assert.fail("Unable to move to project folder "+e.toString());
+			}
 	}
 	
 	public void completeTask(String taskname)
 	{
-		clickElement(driver.findElement(By.xpath("//android.widget.TextView[@text='"+taskname+"']")));
-		clickElement(COMPLETE_TASK_ICON);		
-		checkDisplayed(TASK_COMPLETED_MESSAGE);
+		try {
+				clickElement(driver.findElement(By.xpath("//android.widget.TextView[@text='"+taskname+"']")));
+				clickElement(COMPLETE_TASK_ICON);		
+				checkDisplayed(TASK_COMPLETED_MESSAGE);
+			}catch(Exception e)
+			{
+				Assert.fail("Unable to move to project folder "+e.toString());
+			}
 	}
 	
 	public void verifyTaskDisplayed(String taskname)
 	{
-		checkDisplayed(driver.findElement(By.xpath("//android.widget.TextView[@text='"+taskname+"']")));
+		try {
+				checkDisplayed(driver.findElement(By.xpath("//android.widget.TextView[@text='"+taskname+"']")));
+			}catch(Exception e)
+			{
+				Assert.fail("Task is not displayed "+e.toString());
+			}
 	}
 	
 	public void verifyProjectDisplayed(String projectname)
 	{
-		checkDisplayed(driver.findElement(By.xpath("//android.widget.TextView[@text='"+projectname+"']")));
+		try {
+				checkDisplayed(driver.findElement(By.xpath("//android.widget.TextView[@text='"+projectname+"']")));
+			}catch(Exception e)
+			{
+				Assert.fail("Project is not displayed in the screen "+e.toString());
+			}
 	}
 	
 	private void clickElement(WebElement element)
@@ -139,9 +178,9 @@ public class TodoistPage {
 		element.sendKeys(text);
 	}
 	
-	private void checkDisplayed(WebElement element)
+	private Boolean checkDisplayed(WebElement element)
 	{
 		common.waitForElementVisible(element);
-		element.isDisplayed();
+		return element.isDisplayed();
 	}
 }
