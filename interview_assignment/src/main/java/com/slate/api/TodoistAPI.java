@@ -60,14 +60,14 @@ public class TodoistAPI {
 	{
 		String TASK_ID = "no_id";
 		int count = 0;
-		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
+		RestAssured.baseURI = "https://beta.todoist.com/API/v8/";
 		URL_ENDPOINT = new URI(ENDPOINT+"tasks");	
 	
 		do {  
 			RES = REQ.header(AUTH).get(URL_ENDPOINT).peek();
 			List<HashMap<String,String>> JSON = RES.jsonPath().getList("$");
 			
-				for(int i=0;i<JSON.size();i++)
+				for(int i = 0; i<JSON.size(); i++)
 					{
 					  if(JSON.get(i).get("content").equals(TASK_NAME))
 						  TASK_ID = String.valueOf(JSON.get(i).get("id"));
@@ -85,11 +85,11 @@ public class TodoistAPI {
 	
 	public static void reopenTask(String TASK_ID) throws URISyntaxException
 	{
-		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
+		RestAssured.baseURI = "https://beta.todoist.com/API/v8/";
 		URL_ENDPOINT = new URI(ENDPOINT+"tasks/"+TASK_ID+"/reopen");	
 		RES = REQ.header(AUTH).post(URL_ENDPOINT).peek();
 		
-		if(RES.statusCode()!=204)
+		if(RES.statusCode() != 204)
 			throw new RuntimeException("Task reopen is failed with status code : "+RES.statusCode());
 	}
 }
