@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import com.google.gson.JsonObject;
+import com.slate.common.ReadProperties;
+
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -19,15 +21,15 @@ import io.restassured.http.Header;
 public class TodoistAPI {
 
 	private static RequestSpecification REQ  = RestAssured.given();
-	private static Header AUTH = new Header("Authorization","Bearer 5218e851ebb0f561785972e5244d5112b97eb7a0");
+	private static Header AUTH = new Header("Authorization",ReadProperties.ReadConfigProperties("AUTH_TOKEN"));
 	private static Header CONTENT=new Header("Content-Type","application/json");
-	private static String ENDPOINT = "https://beta.todoist.com/API/v8/";
+	private static String ENDPOINT = ReadProperties.ReadConfigProperties("ENDPOINT_URL");
 	private static URI URL_ENDPOINT;
 	private static Response RES;
 	
 	public static void createProject(String NAME) throws URISyntaxException
 	{
-		RestAssured.baseURI = "https://beta.todoist.com/API/v8/";
+		RestAssured.baseURI = ENDPOINT;
 		URL_ENDPOINT = new URI(ENDPOINT+"projects");
 		JsonObject PROJECT_NAME = new JsonObject();
 		PROJECT_NAME.addProperty("name", NAME);  
@@ -46,7 +48,7 @@ public class TodoistAPI {
 	{
 		String TASK_ID = "no_id";
 		int count = 0;
-		RestAssured.baseURI = "https://beta.todoist.com/API/v8/";
+		RestAssured.baseURI = ENDPOINT;
 		URL_ENDPOINT = new URI(ENDPOINT+"tasks");	
 	
 		do {  
@@ -58,7 +60,6 @@ public class TodoistAPI {
 					  if(JSON.get(i).get("content").equals(TASK_NAME))
 						  TASK_ID = String.valueOf(JSON.get(i).get("id"));
 				  }
-				System.out.println("TASK_ID inside "+TASK_ID);
 				if(TASK_ID.equals("no_id"))
 					count++;
 				else
@@ -71,7 +72,7 @@ public class TodoistAPI {
 	
 	public static void reopenTask(String TASK_ID) throws URISyntaxException
 	{
-		RestAssured.baseURI = "https://beta.todoist.com/API/v8/";
+		RestAssured.baseURI = ENDPOINT;
 		URL_ENDPOINT = new URI(ENDPOINT+"tasks/"+TASK_ID+"/reopen");	
 		RES = REQ.header(AUTH).post(URL_ENDPOINT).peek();
 		

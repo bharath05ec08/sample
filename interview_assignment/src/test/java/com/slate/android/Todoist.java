@@ -2,7 +2,9 @@ package com.slate.android;
 
 import java.net.URISyntaxException;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
+
+//import org.junit.Test;
 import com.slate.api.TodoistAPI;
 
 public class Todoist extends BaseTestcase{
@@ -21,10 +23,10 @@ public class Todoist extends BaseTestcase{
 	public void createTask() throws URISyntaxException {
 		TODOIST_PAGE.loginTodoist("bharath05ec08@gmail.com", "sudhahar");
 		TODOIST_PAGE.movetoProject("TEST_PROJ");
-		TODOIST_PAGE.addTask(TIMESTAMP.getTimestamp());	
+		TODOIST_PAGE.addTask(TASK_NAME);	
 		
 		// API call to verify the task
-		TodoistAPI.verifyTask(TIMESTAMP.getTimestamp());
+		TodoistAPI.verifyTask(TASK_NAME);
 	}
 
 	@Test
@@ -32,13 +34,13 @@ public class Todoist extends BaseTestcase{
 		
 		TODOIST_PAGE.loginTodoist("bharath05ec08@gmail.com", "sudhahar");
 		TODOIST_PAGE.movetoProject("TEST_PROJ");
-		TODOIST_PAGE.addTask(TIMESTAMP.getTimestamp());
-		TODOIST_PAGE.completeTask(TIMESTAMP.getTimestamp());
+		TODOIST_PAGE.addTask(TASK_NAME);
+		TODOIST_PAGE.completeTask(TASK_NAME);
 		
 		// API call to reopen the task
-		TodoistAPI.reopenTask(TASK_ID);
+		TodoistAPI.reopenTask(TodoistAPI.verifyTask(TASK_NAME));
 		
-		TODOIST_PAGE.verifyTaskDisplayed(TIMESTAMP.getTimestamp());
+		TODOIST_PAGE.verifyTaskDisplayed(TASK_NAME);
 	}
 
 }
