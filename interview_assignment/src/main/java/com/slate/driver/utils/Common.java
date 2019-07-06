@@ -13,9 +13,15 @@ public class Common {
 	}
 
 	
-	public void waitForElementVisible(WebElement element)
+	public void waitForElementClickable(WebElement element)
 	{
 		WebDriverWait wait = new WebDriverWait(driver, 60);
 		wait.until(ExpectedConditions.elementToBeClickable(element));
+	}
+	
+	public void waitForElementVisible(WebElement element)
+	{
+		WebDriverWait wait = new WebDriverWait(driver, 60);
+		wait.until(ExpectedConditions.visibilityOf(element));
 	}
 }

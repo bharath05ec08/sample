@@ -22,8 +22,9 @@ public class BaseTestcase {
 	protected static Common common;
 	protected static TodoistPage TODOIST_PAGE;
 	protected static Timestamp TIMESTAMP;
-	protected static String TASK_ID="";
-	private final String APPIUM_URL="http://localhost:4726/wd/hub";
+	protected static String TASK_ID ="";
+	protected static String TASK_NAME = "TASK_";
+	private final String APPIUM_URL = "http://localhost:4726/wd/hub";
 
 	@Before
 	public void setUp() throws Exception {
@@ -33,16 +34,18 @@ public class BaseTestcase {
 		capabilities.setCapability("platformName", "Android");
 		capabilities.setCapability("platformVersion", "6.1");
 		capabilities.setCapability("appPackage", "com.todoist");
-//		capabilities.setCapability("appActivity", "com.todoist.attachment.drive.activity.TDDriveActivity");
 		capabilities.setCapability("appActivity", "com.todoist.activity.HomeActivity");
 				
 		driver = new AndroidDriver(new URL(APPIUM_URL),capabilities);
 		driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-		Thread.sleep(5000);
+	
+		
 		common = new Common(driver);
 		TODOIST_PAGE = new TodoistPage(driver, common);
 		PageFactory.initElements(driver, TODOIST_PAGE);
+		
 		TIMESTAMP = new Timestamp();
+		TASK_NAME = TASK_NAME+TIMESTAMP.getTimestamp();
 	}
 
 	@After

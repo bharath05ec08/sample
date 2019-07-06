@@ -14,55 +14,52 @@ public class TodoistPage {
 	private WebDriver driver;
 	private Common common;
 
-	@FindBy(id="com.todoist:id/btn_welcome_continue_with_email")
+	@FindBy(id = "com.todoist:id/btn_welcome_continue_with_email")
 	public static WebElement CONTINUE_WITH_MAIL;
 	
-	@FindBy(id="com.google.android.gms:id/cancel")
+	@FindBy(id = "com.google.android.gms:id/cancel")
 	public static WebElement NONE_OF_ABOVE;
 	
-	@FindBy(id="com.todoist:id/email_exists_input")
+	@FindBy(id = "com.todoist:id/email_exists_input")
 	public static WebElement EMAIL_TEXTBOX;
 	
-	@FindBy(id="com.todoist:id/btn_continue_with_email")
+	@FindBy(id  = "com.todoist:id/btn_continue_with_email")
 	public static WebElement CONTINUE_BUTTON;
 	
-	@FindBy(id="com.todoist:id/log_in_password")
+	@FindBy(id =  "com.todoist:id/log_in_password")
 	public static WebElement PASSWORD_TEXTBOX;
 	
-	@FindBy(id="com.todoist:id/btn_log_in")
+	@FindBy(id = "com.todoist:id/btn_log_in")
 	public static WebElement LOGIN_BUTTON;
 	
-	@FindBy(xpath="//android.widget.Button[@text='Remind me later']")
+	@FindBy(xpath = "//android.widget.Button[@text='Remind me later']")
 	public static WebElement REMIND_ME_LATER;
 	
-	@FindBy(name="Change the current view")
+	@FindBy(name = "Change the current view")
 	public static WebElement MENU;
 	
-	@FindBy(xpath="//android.widget.TextView[@text='Projects']")
+	@FindBy(xpath = "//android.widget.TextView[@text='Projects']")
 	public static WebElement PROJECTS_FOLDER;
 	
-	@FindBy(xpath="//android.widget.TextView[@text='TEST_PROJ']")
+	@FindBy(xpath = "//android.widget.TextView[@text='TEST_PROJ']")
 	public static WebElement PROJECT_NAME;
 	
-	@FindBy(id="com.todoist:id/fab")
+	@FindBy(id = "com.todoist:id/fab")
 	public static WebElement ADD_TASK_ICON;
 	
-	@FindBy(id="android:id/message")
+	@FindBy(id = "android:id/message")
 	public static WebElement TASK_NAME_TEXTBOX;
 	
-	@FindBy(id="android:id/button1")
+	@FindBy(id = "android:id/button1")
 	public static WebElement SAVE_TASK;
 	
-	@FindBy(id="com.todoist:id/action_mode_close_button")
+	@FindBy(id = "com.todoist:id/action_mode_close_button")
 	public static WebElement TASK_CLOSE_BUTTON;
 	
-//	@FindBy(xpath="//android.widget.TextView[@text='"+TIMESTAMP.getTimestamp()+"']")
-//	public static WebElement TASK_NAME;
-//	
-	@FindBy(id="com.todoist:id/menu_item_complete")
+	@FindBy(id = "com.todoist:id/menu_item_complete")
 	public static WebElement COMPLETE_TASK_ICON;
 	
-	@FindBy(xpath="//android.widget.TextView[@text='Completed.']")
+	@FindBy(xpath = "//android.widget.TextView[@text='Completed.']")
 	public static WebElement TASK_COMPLETED_MESSAGE;
 
 	public TodoistPage(WebDriver driver, Common common)
@@ -131,17 +128,20 @@ public class TodoistPage {
 	private void clickElement(WebElement element)
 	{
 		common.waitForElementVisible(element);
+		common.waitForElementClickable(element);
 		element.click();
 	}
 	
 	private void enterText(WebElement element, String text)
 	{
 		common.waitForElementVisible(element);
+		common.waitForElementClickable(element);
 		element.sendKeys(text);
 	}
 	
 	private void checkDisplayed(WebElement element)
 	{
+		common.waitForElementVisible(element);
 		element.isDisplayed();
 	}
 }
