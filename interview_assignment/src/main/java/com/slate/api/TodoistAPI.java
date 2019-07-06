@@ -1,4 +1,4 @@
-package com.slate.checking;
+package com.slate.api;
 
 import java.net.URI;
 import java.net.URISyntaxException;
