@@ -58,18 +58,27 @@ public class TodoistAPI {
 	
 	public static String verifyTask(String TASK_NAME) throws URISyntaxException
 	{
-		String TASK_ID=null;
+		String TASK_ID = "no_id";
+		int count = 0;
 		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
 		URL_ENDPOINT = new URI(ENDPOINT+"tasks");	
-		RES = REQ.header(AUTH).get(URL_ENDPOINT);
-		
-		  List<HashMap<String,String>> JSON = RES.jsonPath().getList("$");
-		  
-		  for(int i=0;i<JSON.size();i++)
-		  {
-			  if(JSON.get(i).get("content").equals(TASK_NAME))
-				  TASK_ID = String.valueOf(JSON.get(i).get("id"));
-		  }
+	
+		do {  
+			RES = REQ.header(AUTH).get(URL_ENDPOINT).peek();
+			List<HashMap<String,String>> JSON = RES.jsonPath().getList("$");
+			
+				for(int i=0;i<JSON.size();i++)
+					{
+					  if(JSON.get(i).get("content").equals(TASK_NAME))
+						  TASK_ID = String.valueOf(JSON.get(i).get("id"));
+				  }
+				System.out.println("TASK_ID inside "+TASK_ID);
+				if(TASK_ID.equals("no_id"))
+					count++;
+				else
+					break;
+				
+		}while(count<3);
 		  
 		return TASK_ID;
 	}
@@ -78,7 +87,7 @@ public class TodoistAPI {
 	{
 		RestAssured.baseURI="https://beta.todoist.com/API/v8/";
 		URL_ENDPOINT = new URI(ENDPOINT+"tasks/"+TASK_ID+"/reopen");	
-		RES = REQ.header(AUTH).post(URL_ENDPOINT);
+		RES = REQ.header(AUTH).post(URL_ENDPOINT).peek();
 		
 		if(RES.statusCode()!=204)
 			throw new RuntimeException("Task reopen is failed with status code : "+RES.statusCode());

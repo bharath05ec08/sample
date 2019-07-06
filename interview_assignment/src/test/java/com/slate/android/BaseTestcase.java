@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import com.slate.api.TodoistAPI;
+import com.slate.common.Timestamp;
 import com.slate.driver.utils.Common;
 
 import io.appium.java_client.android.AndroidDriver;
@@ -16,6 +18,9 @@ import io.appium.java_client.android.AndroidDriver;
 public class BaseTestcase {
 	protected static WebDriver driver;
 	protected static Common common;
+//	protected static TodoistAPI todoistAPI;
+	protected static Timestamp TIMESTAMP;
+	protected static String TASK_ID="";
 	private final String APPIUM_URL="http://localhost:4726/wd/hub";
 
 	@Before
@@ -33,6 +38,8 @@ public class BaseTestcase {
 		driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 		Thread.sleep(5000);
 		common = new Common(driver);
+//		todoistAPI = new TodoistAPI();
+		TIMESTAMP = new Timestamp();
 	}
 
 	@After
