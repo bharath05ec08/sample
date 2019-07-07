@@ -11,6 +11,9 @@ import org.openqa.selenium.support.FindBy;
 
 import com.slate.driver.utils.Common;
 
+import io.appium.java_client.MobileBy;
+import io.appium.java_client.MobileElement;
+
 public class TodoistPage {
 	
 	private WebDriver driver;
@@ -68,8 +71,17 @@ public class TodoistPage {
 	public static WebElement COMPLETE_TASK_ICON;
 	
 	@FindBy(xpath = "//android.widget.TextView[@text='Completed.']")
-	public static WebElement TASK_COMPLETED_MESSAGE;
+	public static WebElement TASK_COMPLETED_MESSAGE;	
 
+	@FindBy(xpath = "//android.widget.TextView[@text='Settings']")
+	public static WebElement SETTINGS;	
+
+	@FindBy(xpath = "//android.widget.TextView[@text='Log out']")
+	public static WebElement LOG_OUT;
+	
+	@FindBy(xpath = "//android.widget.Button[@text='Yes']")
+	public static WebElement YES_BUTTON;
+	
 	public TodoistPage(WebDriver driver, Common common)
 	{
 		this.driver = driver;
@@ -194,6 +206,21 @@ public class TodoistPage {
 			}catch(Exception e)
 			{
 				Assert.fail("Project is not displayed in the screen "+e.toString());
+			}
+	}
+	
+	public void logout()
+	{
+		try {
+				clickElement(MENU);
+				clickElement(SETTINGS);
+				WebElement element = driver.findElement(MobileBy.AndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\"Log out\").instance(0))"));
+				element.click();
+//				clickElement(LOG_OUT);
+				clickElement(YES_BUTTON);
+			}catch(Exception e)
+			{
+				Assert.fail("Unable to logout form the application "+e.toString());
 			}
 	}
 	

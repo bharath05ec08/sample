@@ -51,6 +51,7 @@ public class BaseTestcase {
 
 	@AfterMethod
 	public void tearDown() throws Exception {
+		TODOIST_PAGE.logout();
 		driver.quit();
 	}
 }
