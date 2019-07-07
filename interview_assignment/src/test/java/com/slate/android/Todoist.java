@@ -8,18 +8,8 @@ import org.testng.annotations.Test;
 import com.slate.api.TodoistAPI;
 
 public class Todoist extends BaseTestcase{
-	
-	@Test
-	public void createProject() throws Exception {		
-		// API call to create the project
-		TodoistAPI.createProject("PROJ_"+TIMESTAMP.getTimestamp());
-		
-		TODOIST_PAGE.loginTodoist(USER_NAME, PASSWORD);
-		TODOIST_PAGE.movetoProjectFolder();
-		TODOIST_PAGE.verifyProjectDisplayed("PROJ_"+TIMESTAMP.getTimestamp());
-	}
 
-	@Test
+	@Test(priority = 0)
 	public void createTask() throws URISyntaxException {
 		TODOIST_PAGE.loginTodoist(USER_NAME, PASSWORD);
 		TODOIST_PAGE.movetoProject("TEST_PROJ");
@@ -29,7 +19,7 @@ public class Todoist extends BaseTestcase{
 		TodoistAPI.verifyTask(TASK_NAME);
 	}
 
-	@Test
+	@Test(priority = 0)
 	public void reopenTask() throws Exception{
 		
 		TODOIST_PAGE.loginTodoist(USER_NAME, PASSWORD);
@@ -42,6 +32,17 @@ public class Todoist extends BaseTestcase{
 		TodoistAPI.reopenTask(TASK_ID);
 		
 		TODOIST_PAGE.verifyTaskDisplayed(TASK_NAME);
+	}	
+	
+	@Test(priority = 1)
+	public void createProject() throws Exception {		
+		// API call to create the project
+		TodoistAPI.createProject("PROJ_"+TIMESTAMP.getTimestamp());
+		
+		TODOIST_PAGE.loginTodoist(USER_NAME, PASSWORD);
+		TODOIST_PAGE.movetoProjectFolder();
+		TODOIST_PAGE.verifyProjectDisplayed("PROJ_"+TIMESTAMP.getTimestamp());
 	}
+
 
 }

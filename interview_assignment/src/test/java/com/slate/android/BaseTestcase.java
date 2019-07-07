@@ -39,9 +39,8 @@ public class BaseTestcase {
 		capabilities.setCapability("appActivity", ReadProperties.ReadConfigProperties("APP_ACTIVITY"));
 		
 		driver = new AndroidDriver(new URL(APPIUM_URL),capabilities);
-		driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-	
-		
+		driver.manage().timeouts().implicitlyWait(Integer.parseInt(ReadProperties.ReadConfigProperties("MIN_TIME")), TimeUnit.SECONDS);
+			
 		common = new Common(driver);
 		TODOIST_PAGE = new TodoistPage(driver, common);
 		PageFactory.initElements(driver, TODOIST_PAGE);

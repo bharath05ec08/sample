@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -35,6 +36,12 @@ public class TodoistPage {
 	
 	@FindBy(xpath = "//android.widget.Button[@text='Remind me later']")
 	public static WebElement REMIND_ME_LATER;
+	
+	@FindBy(xpath = "//android.widget.Button[@text='OK']")
+	public static WebElement OK_BUTTON;
+	
+	@FindBy(xpath = "//android.widget.Button[@text='Never ask']")
+	public static WebElement NEVER_ASK_BUTTON;
 	
 	@FindBy(name = "Change the current view")
 	public static WebElement MENU;
@@ -73,17 +80,38 @@ public class TodoistPage {
 	{
 		try
 		{
-		clickElement(CONTINUE_WITH_MAIL);
-		try
-		{
-		clickElement(NONE_OF_ABOVE);
-		}catch(NoSuchElementException e)
-		{}
-		
-		enterText(EMAIL_TEXTBOX, username);
-		clickElement(CONTINUE_BUTTON);
-		enterText(PASSWORD_TEXTBOX, password);
-		clickElement(LOGIN_BUTTON);
+			// Following can be commented if the gapps installed correctly in the emulator
+			try
+			{
+				clickElement(OK_BUTTON);
+			}catch(NoSuchElementException e)
+			{
+				
+			}catch(TimeoutException e)
+			{
+				
+			}
+			
+			clickElement(CONTINUE_WITH_MAIL);
+			
+			enterText(EMAIL_TEXTBOX, username);
+			clickElement(CONTINUE_BUTTON);
+			enterText(PASSWORD_TEXTBOX, password);
+			clickElement(LOGIN_BUTTON);
+			
+			// Following can be commented if the gapps installed correctly and timezone set in the emulator
+			try
+			{
+				clickElement(NEVER_ASK_BUTTON);
+				clickElement(REMIND_ME_LATER);
+				clickElement(OK_BUTTON);
+			}catch(NoSuchElementException e)
+			{
+				
+			}catch(TimeoutException e)
+			{
+				
+			}			
 		}catch(Exception e)
 		{
 			Assert.fail("Todoist is failed in login screen with exception "+e.toString());
@@ -104,12 +132,17 @@ public class TodoistPage {
 	public void movetoProjectFolder()
 	{
 		try {
-			
+			//Following block can be commented once the app updated with latest version
 			try
 			{
 				clickElement(REMIND_ME_LATER);
 			}catch(NoSuchElementException e)
-			{}
+			{
+				
+			}catch(TimeoutException e)
+			{
+				
+			}
 			
 			clickElement(MENU);
 			clickElement(PROJECTS_FOLDER);
